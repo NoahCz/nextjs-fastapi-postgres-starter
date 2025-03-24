@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
 from db_engine import sync_engine
 from models import User
 
@@ -11,5 +12,11 @@ def seed_user_if_needed():
                 print("User already exists, skipping seeding")
                 return
             print("Seeding user")
-            session.add(User(name="Alice"))
+            session.add(
+                User(
+                    name="Alice",
+                    profile_picture_link="https://randomuser.me/api/portraits/med/women/36.jpg",
+                    username="AliceRocks123",
+                )
+            )
             session.commit()

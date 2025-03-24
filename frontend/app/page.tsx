@@ -1,21 +1,18 @@
-import Image from "next/image";
+import CreateThread from "./components/create-thread/create-thread.component";
+import { ThreadList } from "./components/thread-list";
+import { UserInfo } from "./components/user-info/user-info";
+import { UserProvider } from "./context/user/UserContext";
 
-type User = {
-  id: string;
-  name: string;
-};
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-export default async function Home() {
-  console.log("fetch", `${apiUrl}/users/me`);
-  const user: User = await fetch(`${apiUrl}/users/me`).then((res) =>
-    res.json()
-  );
-
+export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Hello, {user.name}!
+    <main className="py-8 px-4 md:px-8">
+      <h1 className="text-2xl font-bold mb-6">Home</h1>
+
+      <UserProvider>
+        <UserInfo />
+        <CreateThread />
+        <ThreadList />
+      </UserProvider>
     </main>
   );
 }
