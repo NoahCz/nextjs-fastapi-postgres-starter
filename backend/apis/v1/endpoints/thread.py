@@ -1,9 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from apis.v1.schemas.thread import ThreadCreate, ThreadResponse
-from db_engine import sync_engine
+from db.db_engine import sync_engine
 from models import Thread, User
 
 router = APIRouter()
@@ -23,7 +22,7 @@ def create_thread(thread: ThreadCreate):
         return {"threadId": new_thread.id}
 
 
-@router.get("/threads/user/{user_id}", response_model=list[ThreadResponse])
+@router.get("/users/{user_id}/threads", response_model=list[ThreadResponse])
 def get_threads_by_user(user_id: int):
     """
     Retrieve all threads belonging to a specific user.
@@ -33,12 +32,7 @@ def get_threads_by_user(user_id: int):
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        threads = (
-            session.query(Thread)
-            .filter(Thread.userId == user_id)
-            .order_by(Thread.updated_at.desc())
-            .all()
-        )
+        threads = user.threads
 
         thread_responses = [
             ThreadResponse(

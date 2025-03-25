@@ -18,7 +18,7 @@ export const ChatWindow = ({ threadId }: { threadId: string }) => {
     try {
       setLoading(true);
       const response = await fetch(
-        `${apiBasePath}/messages/thread/${threadId}`,
+        `${apiBasePath}/threads/${threadId}/messages`,
       );
 
       if (!response.ok) {

@@ -2,11 +2,10 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from apis.v1.schemas.message import MessageCreate, MessageResponse
-from db_engine import sync_engine
+from db.db_engine import sync_engine
 from models import Message, Thread, User
 
 router = APIRouter()
@@ -50,7 +49,6 @@ def create_message(message: MessageCreate):
         session.add(new_message)
         session.add(response_message)
         session.commit()
-        session.refresh(thread)
 
         return MessageResponse(
             id=new_message.id,
@@ -61,7 +59,7 @@ def create_message(message: MessageCreate):
         )
 
 
-@router.get("/messages/thread/{thread_id}", response_model=list[MessageResponse])
+@router.get("/threads/{thread_id}/messages/", response_model=list[MessageResponse])
 def get_messages_by_thread(thread_id: int):
     """
     Retrieve all messages belonging to a specific thread.
@@ -73,7 +71,7 @@ def get_messages_by_thread(thread_id: int):
         if not thread:
             raise HTTPException(status_code=404, detail="Thread not found")
 
-        messages = session.query(Message).filter(Message.threadId == thread_id).all()
+        messages = thread.messages
 
         message_responses = [
             MessageResponse(

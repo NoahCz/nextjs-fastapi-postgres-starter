@@ -21,7 +21,7 @@ export function ThreadList() {
 
       try {
         setIsLoading(true);
-        const response = await fetch(`${apiBasePath}/threads/user/${user.id}`, {
+        const response = await fetch(`${apiBasePath}/users/${user.id}/threads`, {
           headers: {
             "Content-Type": "application/json",
           },

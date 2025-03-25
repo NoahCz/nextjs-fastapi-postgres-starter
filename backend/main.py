@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from apis import v1
-from seed import seed_user_if_needed
+from db.seed import seed_user_if_needed
 
 seed_user_if_needed()
 
